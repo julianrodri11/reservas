@@ -11,7 +11,7 @@ from responses.usuarios_response import UsuariosResponse
 from config.jwt_manager import  crear_token
 from config.jwt_manager import  JWTBearer
 from config.conexion import conectar_db
-from entidades.TipoUsuarios import TipoUsuarios,guardar
+from entidades.TipoUsuarios import TipoUsuarios,guardar,consultar
 
 
 app = FastAPI()
@@ -26,10 +26,6 @@ def home():
 
 
 
-#tipousuarios=TipoUsuarios
-print("Operacion............")
-#print(tipousuarios)
-print("Operacion............")
 
 #LOGIN
 #ruta con query paramams CLAVE VALOR COMO JSON O BODY
@@ -37,7 +33,6 @@ print("Operacion............")
 def crear_usuarios_body(login:LoginRequest):
     if login.correo=='julianrodri11@gmail.com' and login.contrasena=='123':
         token: str = crear_token(login.dict())
-        #return JSONResponse(status_code=200, content={"token":token})
         return JSONResponse(status_code=200, content=token)
     else:
         return {"Error":"Usuario no encontrado"}
@@ -52,15 +47,11 @@ def crear_tipo_usuarios(tipo_usuario: TipoUsuarioRequest):
 
 
 
-#ruta con nombre
-@app.get('/consultar_usuarios',tags=['Usuarios'],dependencies=[Depends(JWTBearer())])
-def get_usuarios():
-    return "Controller para consultar usuarios "
-
 #ruta con path parameter
-@app.get('/consultar_usuarios/{id}',tags=['Usuarios'])
-def get_usuario_id(id:int):
-    return "parametro recibido por PATH PARAMETER",{id}
+@app.post('/consultar_usuarios/',tags=['Usuarios'])
+def get_usuario_id(tipo_usuario: TipoUsuarioRequest):
+    r:str=consultar(tipo_usuario.nombre)
+    return r
 
 #ruta con dos path paramateter
 @app.get('/consultar_usuarios/{tipo_doc}/{id}',tags=['Usuarios'])
