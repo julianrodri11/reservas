@@ -11,7 +11,7 @@ from responses.usuarios_response import UsuariosResponse
 from config.jwt_manager import  crear_token
 from config.jwt_manager import  JWTBearer
 from config.conexion import conectar_db
-from entidades.TipoUsuarios import TipoUsuarios,guardar,consultar
+from entidades.TipoUsuarios import TipoUsuarios, actualizar, eliminar,guardar,consultar
 
 
 app = FastAPI()
@@ -33,7 +33,7 @@ def home():
 def crear_usuarios_body(login:LoginRequest):
     if login.correo=='julianrodri11@gmail.com' and login.contrasena=='123':
         token: str = crear_token(login.dict())
-        return JSONResponse(status_code=200, content=token)
+        return JSONResponse(status_code=200, content={"token":token})
     else:
         return {"Error":"Usuario no encontrado"}
         
@@ -42,7 +42,21 @@ def crear_usuarios_body(login:LoginRequest):
 @app.post('/crear_tipo_usuarios',tags=['Tipo Usuarios'],dependencies=[Depends(JWTBearer())])
 #@app.post('/crear_tipo_usuarios',tags=['Tipo Usuarios'])
 def crear_tipo_usuarios(tipo_usuario: TipoUsuarioRequest):
-    guardar(tipo_usuario.nombre)    
+    guardar(tipo_usuario)    
+    return {"message": "Controller para post QUERY PARAMS crear un tipo usuario", "data": tipo_usuario.dict()}
+
+#ruta con query paramams CLAVE VALOR
+@app.put('/actualizar_tipo_usuarios',tags=['Tipo Usuarios'],dependencies=[Depends(JWTBearer())])
+#@app.post('/crear_tipo_usuarios',tags=['Tipo Usuarios'])
+def actualizar_tipo_usuarios(tipo_usuario: TipoUsuarioRequest):
+    actualizar(tipo_usuario)    
+    return {"message": "Controller para post QUERY PARAMS crear un tipo usuario", "data": tipo_usuario.dict()}
+
+#ruta con query paramams CLAVE VALOR
+@app.delete('/eliminar_tipo_usuarios',tags=['Tipo Usuarios'],dependencies=[Depends(JWTBearer())])
+#@app.post('/crear_tipo_usuarios',tags=['Tipo Usuarios'])
+def eliminar_tipo_usuarios(tipo_usuario: TipoUsuarioRequest):
+    eliminar(tipo_usuario)    
     return {"message": "Controller para post QUERY PARAMS crear un tipo usuario", "data": tipo_usuario.dict()}
 
 
