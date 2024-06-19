@@ -16,8 +16,12 @@ class TipoUsuarios(Base):
     id = Column(Integer, primary_key=True)
     nombre = Column(String(25), nullable=False)
 
+
+
 #crear las tablas en caso de ser necesario
-#Base.metadata.create_all(engine)
+Base.metadata.create_all(engine)
+
+
 
 def guardar(tipousuariorequest:TipoUsuarioRequest):  
     # Crea una sesión para interactuar con la base de datos
@@ -28,6 +32,8 @@ def guardar(tipousuariorequest:TipoUsuarioRequest):
     session.add(registro)
     session.commit()
     session.close()
+
+
 
 def consultar(nombre:str):  
     # Crea una sesión para interactuar con la base de datos
@@ -44,6 +50,8 @@ def consultar(nombre:str):
     else:
         session.close()
         return ("Usuario no encontrado")
+    
+
 
 def actualizar(tipousuariorequest:TipoUsuarioRequest):
     # Crea una sesión para interactuar con la base de datos
@@ -62,6 +70,8 @@ def actualizar(tipousuariorequest:TipoUsuarioRequest):
 
     # Cerrar la sesión
     session.close()
+
+
 
 def eliminar(tipousuariorequest:TipoUsuarioRequest):
     # Crea una sesión para interactuar con la base de datos

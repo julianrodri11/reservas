@@ -12,6 +12,7 @@ from config.jwt_manager import  crear_token
 from config.jwt_manager import  JWTBearer
 from config.conexion import conectar_db
 from entidades.TipoUsuarios import TipoUsuarios, actualizar, eliminar,guardar,consultar
+from entidades.Usuarios import Usuarios, guardar_usuarios, consultar_usuarios,actualizar_usuarios_back
 
 
 app = FastAPI()
@@ -37,46 +38,73 @@ def crear_usuarios_body(login:LoginRequest):
     else:
         return {"Error":"Usuario no encontrado"}
         
-
-#ruta con query paramams CLAVE VALOR
+#TIPO USUARIOS
 @app.post('/crear_tipo_usuarios',tags=['Tipo Usuarios'],dependencies=[Depends(JWTBearer())])
-#@app.post('/crear_tipo_usuarios',tags=['Tipo Usuarios'])
 def crear_tipo_usuarios(tipo_usuario: TipoUsuarioRequest):
     guardar(tipo_usuario)    
     return {"message": "Controller para post QUERY PARAMS crear un tipo usuario", "data": tipo_usuario.dict()}
 
-#ruta con query paramams CLAVE VALOR
+
 @app.put('/actualizar_tipo_usuarios',tags=['Tipo Usuarios'],dependencies=[Depends(JWTBearer())])
-#@app.post('/crear_tipo_usuarios',tags=['Tipo Usuarios'])
 def actualizar_tipo_usuarios(tipo_usuario: TipoUsuarioRequest):
     actualizar(tipo_usuario)    
     return {"message": "Controller para post QUERY PARAMS crear un tipo usuario", "data": tipo_usuario.dict()}
 
-#ruta con query paramams CLAVE VALOR
+
 @app.delete('/eliminar_tipo_usuarios',tags=['Tipo Usuarios'],dependencies=[Depends(JWTBearer())])
-#@app.post('/crear_tipo_usuarios',tags=['Tipo Usuarios'])
 def eliminar_tipo_usuarios(tipo_usuario: TipoUsuarioRequest):
     eliminar(tipo_usuario)    
     return {"message": "Controller para post QUERY PARAMS crear un tipo usuario", "data": tipo_usuario.dict()}
 
 
 
-#ruta con path parameter
-@app.post('/consultar_usuarios/',tags=['Usuarios'])
-def get_usuario_id(tipo_usuario: TipoUsuarioRequest):
-    r:str=consultar(tipo_usuario.nombre)
+
+
+#USUARIOS
+#@app.post('/crear_usuarios',tags=['Usuarios'],dependencies=[Depends(JWTBearer())])
+@app.post('/crear_usuarios',tags=['Usuarios'])
+def crear_usuarios(usuario: UsuariosRequest):
+    guardar_usuarios(usuario)    
+    return {"message": "Controller para post QUERY PARAMS crear un tipo usuario", "data": usuario.dict()}
+
+
+#ruta con dos QUERY paramateter
+@app.get('/consultar_usuarios',tags=['Usuarios'])
+def get_usuario_nombre(nombre:str, apellido:str, documento:str):
+    #return "parametros recibidos por PATH PARAMETER",{tipo_doc,id}
+    r:List=consultar_usuarios(nombre,apellido,documento)
     return r
 
-#ruta con dos path paramateter
+
+@app.put('/actualizar_usuarios',tags=['Usuarios'])
+def actualizar_usuarios(usuario: UsuariosRequest):
+    actualizar_usuarios_back(usuario)    
+    return {"message": "Usuario actualizado", "data": usuario.dict()}
+
+
+
+
+#casos de prueba de aprendizaje
+
+
+
+#ruta con path parameter
+""" @app.post('/consultar_usuarios/',tags=['Usuarios'])
+def get_consultar_usuarios(usuario: UsuariosRequest):
+    r:str=consultar_usuarios(usuario.primer_nombre)
+    return r """
+
+
+#ruta con dos PATH paramateter
 @app.get('/consultar_usuarios/{tipo_doc}/{id}',tags=['Usuarios'])
 def get_usuario_tipo_doc_id(tipo_doc:str, id:int):
     return "parametros recibidos por PATH PARAMETER",{tipo_doc,id}
 
 #ruta con query paramams CLAVE VALOR
-@app.post('/crear_usuarios',tags=['Usuarios'])
+""" @app.post('/crear_usuarios',tags=['Usuarios'])
 def crear_usuarios(tipo_doc:str, id:int):
     return "Controller para post QUERY PARAMS ",{tipo_doc,id}
-
+ """
 #ruta con query paramams CLAVE VALOR COMO JSON O BODY
 @app.post('/crear_usuarios_body',tags=['Usuarios'])
 def crear_usuarios_body(usuarios:UsuariosRequest):
@@ -86,7 +114,7 @@ def crear_usuarios_body(usuarios:UsuariosRequest):
     #return {"message": "Controller para post QUERY PARAMS BODY", "data": usuarios}
     return usuariosres
 
-@app.put('/actualizar_usuarios',tags=['Usuarios'])
+@app.put('/actualizar__usuarios',tags=['Usuarios'])
 def actualizar_usuarios():
     return "Controller para put "
 
