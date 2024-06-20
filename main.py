@@ -12,7 +12,7 @@ from config.jwt_manager import  crear_token
 from config.jwt_manager import  JWTBearer
 from config.conexion import conectar_db
 from entidades.TipoUsuarios import TipoUsuarios, actualizar, eliminar,guardar,consultar
-from entidades.Usuarios import Usuarios, guardar_usuarios, consultar_usuarios,actualizar_usuarios_back
+from entidades.Usuarios import Usuarios, guardar_usuarios, consultar_usuarios,actualizar_usuarios_controller,eliminar_usuarios_controller
 
 
 app = FastAPI()
@@ -78,8 +78,13 @@ def get_usuario_nombre(nombre:str, apellido:str, documento:str):
 
 @app.put('/actualizar_usuarios',tags=['Usuarios'])
 def actualizar_usuarios(usuario: UsuariosRequest):
-    actualizar_usuarios_back(usuario)    
-    return {"message": "Usuario actualizado", "data": usuario.dict()}
+    actualizar_usuarios_controller(usuario)    
+    return {"message": "Usuario actualizado", "data": usuario.model_dump()}
+
+@app.delete('/eliminar_usuarios',tags=['Usuarios'])
+def eliminar_usuarios(id_usuario: int):
+    eliminar_usuarios_controller(id_usuario)    
+    return {"message": "usuario eliminado", "data": id_usuario}
 
 
 
@@ -114,13 +119,6 @@ def crear_usuarios_body(usuarios:UsuariosRequest):
     #return {"message": "Controller para post QUERY PARAMS BODY", "data": usuarios}
     return usuariosres
 
-@app.put('/actualizar__usuarios',tags=['Usuarios'])
-def actualizar_usuarios():
-    return "Controller para put "
-
-@app.delete('/eliminar_usuarios',tags=['Usuarios'])
-def eliminar_usuarios():
-    return "Controller para delete "
 
 @app.patch('/subir_usuarios',tags=['Usuarios'])
 def usuarios():

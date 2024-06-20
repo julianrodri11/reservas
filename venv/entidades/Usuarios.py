@@ -77,7 +77,7 @@ def consultar_usuarios(nombre:str,apellido:str,documento:str):
     
 
 
-def actualizar_usuarios_back(usuariorequest:UsuariosRequest):
+def actualizar_usuarios_controller(usuariorequest:UsuariosRequest):
     # Crea una sesión para interactuar con la base de datos
     session = sessionmaker(bind=engine)
     session = session()
@@ -101,12 +101,12 @@ def actualizar_usuarios_back(usuariorequest:UsuariosRequest):
 
 
 
-def eliminar_usuarios(usuariorequest:UsuariosRequest):
+def eliminar_usuarios_controller(id_usuario:int):
     # Crea una sesión para interactuar con la base de datos
     session = sessionmaker(bind=engine)
     session = session()
     # Obtiene un registro específico por ID
-    usuario = session.query(Usuarios).filter_by(id=usuariorequest.id).first()
+    usuario = session.query(Usuarios).filter_by(id_usuario=id_usuario).first()
 
     # Si el registro existe, actualiza la información y guarda los cambios
     if usuario:
